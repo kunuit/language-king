@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import * as mongoose from 'mongoose';
 import { Role } from '../type/jwt.interface';
 
 export type UserDocument = User & Document;
@@ -25,6 +26,9 @@ export class User {
 
   @Prop({ required: true })
   role: Role;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  _id: mongoose.ObjectId;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

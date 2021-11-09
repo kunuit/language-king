@@ -22,14 +22,14 @@ export class UserService {
   ) {}
 
   async create(registerDto: RegisterDto): Promise<User> {
-    const createdUser = new this.userModel(registerDto);
+    const createdUser = await new this.userModel(registerDto);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(createdUser.password, salt);
 
     createdUser.password = hashedPassword;
 
-    return createdUser.save();
+    return await createdUser.save();
   }
 
   async findOne(payload: object): Promise<any> {

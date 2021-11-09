@@ -5,6 +5,7 @@ import { configValidationSchema } from './schema/config.schema';
 import { UserModule } from './user/user.module';
 import { DictionaryModule } from './dictionary/dictionary.module';
 import { WordModule } from './word/word.module';
+import { RoomModule } from './room/room.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { WordModule } from './word/word.module';
     UserModule,
     DictionaryModule,
     WordModule,
+    RoomModule,
   ],
 })
 export class AppModule {}

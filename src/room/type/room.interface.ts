@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongoose';
 
 export enum Type {
-  chaoTicLetter = 'chaoTicLetter',
+  chaoTicLetter = 'chaoticLetter',
   truthyAndFalsyWord = 'truthyAndFalsyWord',
   description = 'descriptionWord',
 }

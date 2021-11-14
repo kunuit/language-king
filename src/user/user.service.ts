@@ -102,10 +102,7 @@ export class UserService {
       }
     }
 
-    console.log(`user 1`, user);
-
     user.firebaseRegisterToken = firebaseRegisterToken;
-    console.log(`user 2`, user);
     await user.save();
 
     // generate and sign access token, refresh token

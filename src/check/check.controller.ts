@@ -34,14 +34,14 @@ export class CheckController {
       return res.status(HttpStatus.OK).json({
         success: true,
         message: 'You wrong',
-        data: { isCorrect: false },
+        data: { isCorrect: false, truthyWord: isCheckDetail.checkKey },
       });
     }
 
     return res.status(HttpStatus.OK).json({
       success: true,
       message: 'You right',
-      data: { isCorrect: true },
+      data: { isCorrect: true, truthyWord: isCheckDetail.checkKey },
     });
   }
 }

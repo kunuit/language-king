@@ -12,6 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { RandomInt } from 'common/utils/math';
 import { CheckService } from 'src/check/check.service';
 import { RoomService } from 'src/room/room.service';
 import { Type } from 'src/room/type/room.interface';
@@ -85,6 +86,17 @@ export class WordController {
 
     if (type === Type.truthyAndFalsyWord) {
       data = { ...data, word: await this.wordService.getTrueAndFalseWord() };
+
+      // number of word is 2
+      const randomOneWord =
+        data.word.falsyWord[RandomInt(0, data.word.falsyWord.length)];
+      let truthyAndFalsyWord =
+        Math.random() * 10 > 5
+          ? [data.word.truthyWord, randomOneWord]
+          : [randomOneWord, data.word.truthyWord];
+
+      data.word = { ...data.word, truthyAndFalsyWord };
+      delete data.word.falsyWord;
     }
 
     await this.checkService.createCheckDetail({

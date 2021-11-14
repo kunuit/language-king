@@ -23,7 +23,7 @@ export class WordService {
       return tmp;
     });
 
-    return { chaoticWord: data.join('/'), truthyWord: wordTmp };
+    return { chaoticWord: data.join('/'), truthyWord: wordTmp.toLowerCase() };
   }
 
   async getTrueAndFalseWord() {
@@ -88,7 +88,7 @@ export class WordService {
       return this.getTrueAndFalseWord();
     } else {
       return {
-        truthyWord: wordTmp,
+        truthyWord: wordTmp.toLowerCase(),
         falsyWord: falsyWordTotal.map((word) => word.join(' ')),
       };
     }

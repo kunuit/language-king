@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import * as randomstring from 'randomstring';
 import { RoomDetail, RoomDetailDocument } from './schema/room-detail.schema';
 import { Room, RoomDocument } from './schema/room.schema';
@@ -20,13 +20,13 @@ export class RoomService {
     const create = new this.roomModel({
       ...createRoomInFa,
       roomKey: randomKey,
+      _id: new Types.ObjectId(),
     });
 
     return await this.roomModel.create(create);
   }
 
   async find(filter: Object): Promise<Room[]> {
-    console.log(`filter`, filter);
     return await this.roomModel.find({ ...filter }).exec();
   }
   async findOne(filter: Object): Promise<Room> {
@@ -35,13 +35,15 @@ export class RoomService {
 
   //* room detail
   async joinRoom(joinRoomInFa: JoinRoomInFa): Promise<void> {
-    const create = new this.roomDetailModel(joinRoomInFa);
+    const create = new this.roomDetailModel({
+      ...joinRoomInFa,
+      _id: new Types.ObjectId(),
+    });
 
     await this.roomDetailModel.create(create);
   }
 
   async findRD(filter: Object): Promise<RoomDetail[]> {
-    console.log(`filter`, filter);
     return await this.roomDetailModel.find({ ...filter }).exec();
   }
   async findOneRD(filter: Object): Promise<RoomDetail> {

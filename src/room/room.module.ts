@@ -32,5 +32,6 @@ import { ConfigModule } from '@nestjs/config';
   ],
   providers: [RoomService],
   controllers: [RoomController],
+  exports: [RoomService]
 })
 export class RoomModule {}

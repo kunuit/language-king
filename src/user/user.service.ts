@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { ConfigService } from '@nestjs/config';
 import * as randRomString from 'randomstring';
 import * as bcrypt from 'bcrypt';
@@ -72,7 +72,7 @@ export class UserService {
     let user;
 
     if (isGuest) {
-      user = await this.create({
+      const create = new this.userModel({
         username,
         password: 'Guest123!',
         email: 'guest123@gmail.com',
@@ -81,7 +81,9 @@ export class UserService {
           charset: 'numeric',
         }),
         role: Role.guest,
+        _id: new Types.ObjectId(),
       });
+      user = await this.create(create);
     }
 
     if (!isGuest) {

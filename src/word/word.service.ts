@@ -1,5 +1,5 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { RandomInt, SearchRegex } from 'common/utils/math';
+import { RandomInt } from 'common/utils/math';
 import { DictionaryService } from '../dictionary/dictionary.service';
 
 @Injectable()
@@ -12,11 +12,7 @@ export class WordService {
   getChaoticWord() {
     const wordTmp = this.dictionaryService.randomWordInList({ number: 2 });
 
-    console.log(`wordTmp`, wordTmp);
-
-    const textObject = { ...wordTmp.replace(SearchRegex(' '), '') };
-
-    console.log(`textObject`, textObject);
+    const textObject = { ...wordTmp.toLowerCase().replace(/ /gi, '') };
 
     let keyText = Object.keys(textObject);
 
@@ -27,16 +23,12 @@ export class WordService {
       return tmp;
     });
 
-    console.log(data.join('/'));
-
-    return data.join('/');
+    return { chaoticWord: data.join('/'), truthyWord: wordTmp };
   }
 
   async getTrueAndFalseWord() {
     const wordTmp = this.dictionaryService.randomWordInList({ number: 2 });
-    console.log(`wordTmp`, wordTmp);
     const trueWordArray = wordTmp.toLowerCase().split(' ');
-    console.log(`trueWordArray`, trueWordArray);
 
     let falsyWordTotal = [];
 
@@ -91,10 +83,14 @@ export class WordService {
     if (LastSlotArray.length > 0) {
       falsyWordTotal = [...falsyWordTotal, ...LastSlotArray];
     }
-    console.log(`falsyWordTotal`, falsyWordTotal);
 
     if (falsyWordTotal.length === 0) {
       return this.getTrueAndFalseWord();
+    } else {
+      return {
+        truthyWord: wordTmp,
+        falsyWord: falsyWordTotal.map((word) => word.join(' ')),
+      };
     }
   }
 

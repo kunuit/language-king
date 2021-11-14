@@ -45,6 +45,7 @@ export class RoomController {
         data: { room: newRoom },
       });
     } catch (error) {
+      console.log(`error`, error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
         success: false,
         message: error,

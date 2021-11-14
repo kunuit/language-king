@@ -39,6 +39,11 @@ export class RoomController {
         memQu,
       });
 
+      await this.roomService.joinRoom({
+        roomId: newRoom._id,
+        userId: _id,
+      });
+
       return res.status(HttpStatus.OK).json({
         success: true,
         message: 'We have a new room',

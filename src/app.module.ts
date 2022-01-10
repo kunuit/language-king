@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { configValidationSchema } from './schema/config.schema';
@@ -7,6 +7,7 @@ import { DictionaryModule } from './dictionary/dictionary.module';
 import { WordModule } from './word/word.module';
 import { RoomModule } from './room/room.module';
 import { CheckModule } from './check/check.module';
+import { LoggerMiddleware } from './utils/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -30,4 +31,8 @@ import { CheckModule } from './check/check.module';
     CheckModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

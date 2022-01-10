@@ -7,7 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from '../type/room.interface';
+import { Type, Level } from '../type/room.interface';
 
 export class CreateRoomDto {
   @ApiProperty()
@@ -28,5 +28,13 @@ export class CreateRoomDto {
 
   @ApiProperty()
   @IsNumber()
-  timeLine: Number;
+  timeline: Number;
+
+  @ApiProperty()
+  @IsNumber()
+  numberOfQuestion: Number;
+
+  @ApiProperty()
+  @IsString()
+  level: Level;
 }

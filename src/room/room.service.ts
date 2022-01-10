@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import * as randomstring from 'randomstring';
@@ -8,11 +8,14 @@ import { CreateRoomInFa, JoinRoomInFa } from './type/room.interface';
 
 @Injectable()
 export class RoomService {
+  logger: Logger;
   constructor(
     @InjectModel(Room.name) private roomModel: Model<RoomDocument>,
     @InjectModel(RoomDetail.name)
     private roomDetailModel: Model<RoomDetailDocument>,
-  ) {}
+  ) {
+    this.logger = new Logger();
+  }
 
   //* room
   async createRoom(createRoomInFa: CreateRoomInFa): Promise<Room> {

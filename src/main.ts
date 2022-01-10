@@ -1,15 +1,13 @@
 require('module-alias/register');
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-import * as morgan from 'morgan';
 
 declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // app.use(morgan('tiny'));
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()

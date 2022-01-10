@@ -28,15 +28,24 @@ export class RoomController {
     @Body() createRoomDto: CreateRoomDto,
   ) {
     try {
-      const { name, timeLine, type, memQu } = createRoomDto;
+      const {
+        name,
+        timeline,
+        type,
+        memQu,
+        numberOfQuestion,
+        level,
+      } = createRoomDto;
       const { _id } = req.user;
 
       const newRoom = await this.roomService.createRoom({
         name,
-        timeLine,
+        timeline,
         ownRoom: _id,
         type,
         memQu,
+        numberOfQuestion,
+        level,
       });
 
       await this.roomService.joinRoom({

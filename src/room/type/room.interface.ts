@@ -6,12 +6,21 @@ export enum Type {
   description = 'descriptionWord',
 }
 
+export enum Level {
+  copper = 'copper',
+  silver = 'silver',
+  gold = 'gold',
+  platinum = 'platinum',
+}
+
 export interface CreateRoomInFa {
   name: String;
   memQu: Number;
   ownRoom: ObjectId;
   type: Type;
-  timeLine: Number;
+  timeline: Number;
+  level: Level;
+  numberOfQuestion: Number;
 }
 
 export interface JoinRoomInFa {

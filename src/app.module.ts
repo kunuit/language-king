@@ -8,6 +8,7 @@ import { WordModule } from './word/word.module';
 import { RoomModule } from './room/room.module';
 import { CheckModule } from './check/check.module';
 import { LoggerMiddleware } from './utils/middleware/logger.middleware';
+import { EarnMoreModule } from './earn-more/earn-more.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { LoggerMiddleware } from './utils/middleware/logger.middleware';
     WordModule,
     RoomModule,
     CheckModule,
+    EarnMoreModule,
   ],
 })
 export class AppModule implements NestModule {

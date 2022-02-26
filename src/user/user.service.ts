@@ -22,7 +22,10 @@ export class UserService {
   ) {}
 
   async create(registerDto: RegisterDto): Promise<User> {
-    const createdUser = await new this.userModel(registerDto);
+    const createdUser = await new this.userModel({
+      ...registerDto,
+      _id: new Types.ObjectId(),
+    });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(createdUser.password, salt);
@@ -43,7 +46,7 @@ export class UserService {
     return user;
   }
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(username: String, password: String): Promise<any> {
     const user = await this.userModel.findOne({ username }).exec();
     if (user && user.password === password) return user;
     return null;
@@ -64,7 +67,7 @@ export class UserService {
 
   async login(authCredentialsDto: AuthCredentialsDto): Promise<any> {
     const {
-      username,
+      phone,
       password,
       firebaseRegisterToken,
       isGuest,
@@ -73,13 +76,16 @@ export class UserService {
 
     if (isGuest) {
       const create = new this.userModel({
-        username,
-        password: 'Guest123!',
-        email: 'guest123@gmail.com',
-        phone: randRomString.generate({
+        username: `#${randRomString.generate({
           length: 10,
           charset: 'numeric',
-        }),
+        })}`,
+        password: `${randRomString.generate({
+          length: 6,
+          charset: 'numeric',
+        })}`,
+        email: 'guest123@gmail.com',
+        phone,
         role: Role.guest,
         _id: new Types.ObjectId(),
       });
@@ -88,9 +94,7 @@ export class UserService {
 
     if (!isGuest) {
       // find user in db
-      user = await this.findOne({ username });
-
-      // console.log(`password, user.password`, password, user.password);
+      user = await this.findOne({ phone });
 
       // compare passwords
       const areEqual = await bcrypt.compare(password, user.password);
@@ -107,12 +111,14 @@ export class UserService {
 
     // generate and sign access token, refresh token
     const accessToken = this._createToken({
-      username,
+      phone,
+      username: user?.username,
       type: tokenType.AccessToken,
     });
 
     const refreshToken = this._createToken({
-      username,
+      phone,
+      username: user?.username,
       type: tokenType.RefreshToken,
     });
 
@@ -126,11 +132,14 @@ export class UserService {
         phone: user.phone,
         email: user.email,
         createdAt: user.createdAt,
+        role: user.role,
+        mana: user.mana,
+        gold: user.gold,
       },
     };
   }
 
-  async logout(_id: string): Promise<any> {
+  async logout(_id: String): Promise<any> {
     const user = await this.userModel.findOne({ _id }).exec();
 
     user.firebaseRegisterToken = null;
@@ -139,10 +148,21 @@ export class UserService {
     return true;
   }
 
+  async update(_id: String, updateParams: Object): Promise<any> {
+    const user = await this.userModel.findByIdAndUpdate({ _id }, updateParams);
+    if (!user) {
+      throw new HttpException(
+        { message: 'invalid user', success: false },
+        HttpStatus.OK,
+      );
+    }
+    return user;
+  }
+
   private _createToken(createToken: CreateToken): any {
-    const { username, type } = createToken;
+    const { phone, username, type } = createToken;
     const token = this.jwtService.sign(
-      { username },
+      { phone, username },
       {
         secret:
           type === tokenType.AccessToken

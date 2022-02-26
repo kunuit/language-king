@@ -9,24 +9,20 @@ import {
 } from 'class-validator';
 
 export class AuthCredentialsDto {
-  @IsString()
-  @MinLength(4)
-  @MaxLength(20)
-  @IsNotEmpty()
-  username: string;
-
-  @IsString()
-  @MinLength(8)
-  @MaxLength(20)
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'password too weak',
+  @Matches(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, {
+    message: 'must is phone: XXX-XXX-XXXX',
   })
-  password: string;
+  phone: String;
+
+  @IsString()
+  @MinLength(6)
+  @MaxLength(6)
+  password: String;
 
   @IsString()
   @IsNotEmpty()
-  firebaseRegisterToken: string;
+  firebaseRegisterToken: String;
 
   @IsBoolean()
-  isGuest: boolean;
+  isGuest: Boolean;
 }

@@ -18,7 +18,7 @@ export class User {
   @Prop({ required: true })
   email: String;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   phone: String;
 
   @Prop({ unique: false })
@@ -26,6 +26,12 @@ export class User {
 
   @Prop({ required: true })
   role: Role;
+
+  @Prop({ default: 300 })
+  gold: Number;
+
+  @Prop({ default: 12 })
+  mana: Number;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   _id: mongoose.ObjectId;

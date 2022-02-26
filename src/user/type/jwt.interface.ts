@@ -1,9 +1,10 @@
 export interface JwtPayload {
-  username: string;
+  username: String;
 }
 
 export interface CreateToken {
-  username: string;
+  username: String;
+  phone: String;
   type: tokenType;
 }
 

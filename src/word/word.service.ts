@@ -11,8 +11,8 @@ export class WordService {
 
   getChaoticWord() {
     const wordTmp = this.dictionaryService.randomWordInList({ number: 2 });
-
-    const textObject = { ...wordTmp.toLowerCase().replace(/ /gi, '') };
+    console.log(wordTmp);
+    let textObject = { ...wordTmp?.trim()?.toLowerCase().replace(/ /gi, '') };
 
     let keyText = Object.keys(textObject);
 
@@ -23,12 +23,15 @@ export class WordService {
       return tmp;
     });
 
-    return { chaoticWord: data.join('/'), truthyWord: wordTmp.toLowerCase() };
+    return {
+      chaoticWord: data.join('/'),
+      truthyWord: wordTmp?.trim()?.toLowerCase(),
+    };
   }
 
   async getTrueAndFalseWord() {
     const wordTmp = this.dictionaryService.randomWordInList({ number: 2 });
-    const trueWordArray = wordTmp.toLowerCase().split(' ');
+    const trueWordArray = wordTmp?.trim()?.toLowerCase().split(' ');
 
     let falsyWordTotal = [];
 
@@ -88,7 +91,7 @@ export class WordService {
       return this.getTrueAndFalseWord();
     } else {
       return {
-        truthyWord: wordTmp.toLowerCase(),
+        truthyWord: wordTmp?.trim()?.toLowerCase(),
         falsyWord: falsyWordTotal.map((word) => word.join(' ')),
       };
     }

@@ -17,11 +17,8 @@ export class RegisterDto {
   username: String;
 
   @IsString()
-  @MinLength(8)
-  @MaxLength(20)
-  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'password too weak',
-  })
+  @MinLength(6)
+  @MaxLength(6)
   password: String;
 
   @IsEmail()
@@ -34,4 +31,11 @@ export class RegisterDto {
 
   @IsNotEmpty()
   role: Role;
+}
+
+export class IsExistPhoneDto {
+  @Matches(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, {
+    message: 'must is phone: XXX-XXX-XXXX',
+  })
+  phone: String;
 }

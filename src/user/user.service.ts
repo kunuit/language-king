@@ -28,6 +28,7 @@ export class UserService {
     });
 
     const salt = await bcrypt.genSalt(10);
+
     const hashedPassword = await bcrypt.hash(createdUser.password, salt);
 
     createdUser.password = hashedPassword;
@@ -60,22 +61,17 @@ export class UserService {
       })
       .exec();
     if (user) {
-      return true;
+      return user;
     }
     return false;
   }
 
   async login(authCredentialsDto: AuthCredentialsDto): Promise<any> {
-    const {
-      phone,
-      password,
-      firebaseRegisterToken,
-      isGuest,
-    } = authCredentialsDto;
+    const { phone, password, firebaseRegisterToken, role } = authCredentialsDto;
     let user;
 
-    if (isGuest) {
-      const create = new this.userModel({
+    if (role === Role.guest) {
+      user = await this.create({
         username: `#${randRomString.generate({
           length: 10,
           charset: 'numeric',
@@ -87,12 +83,10 @@ export class UserService {
         email: 'guest123@gmail.com',
         phone,
         role: Role.guest,
-        _id: new Types.ObjectId(),
       });
-      user = await this.create(create);
     }
 
-    if (!isGuest) {
+    if (role === Role.user) {
       // find user in db
       user = await this.findOne({ phone });
 

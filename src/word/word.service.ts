@@ -11,7 +11,6 @@ export class WordService {
 
   getChaoticWord() {
     const wordTmp = this.dictionaryService.randomWordInList({ number: 2 });
-    console.log(wordTmp);
     let textObject = { ...wordTmp?.trim()?.toLowerCase().replace(/ /gi, '') };
 
     let keyText = Object.keys(textObject);

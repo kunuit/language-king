@@ -14,6 +14,6 @@ export enum tokenType {
 }
 
 export enum Role {
-  guest= 'guest',
-  user= 'user,'
+  guest = 'guest',
+  user = 'user',
 }

@@ -51,7 +51,7 @@ export class UserController {
 
   @Post('/isExistPhone')
   async isExistPhone(@Res() res, @Body() isExistPhoneDto: IsExistPhoneDto) {
-    const isExist = await this.userService.doesTypeExists(
+    const user = await this.userService.doesTypeExists(
       'phone',
       isExistPhoneDto?.phone,
     );
@@ -60,7 +60,8 @@ export class UserController {
       success: true,
       message: 'Check exist done!',
       data: {
-        isExist,
+        isExist: !!user,
+        username: user?.username,
       },
     });
   }

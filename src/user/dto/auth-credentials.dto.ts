@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -7,6 +8,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { Role } from '../type/jwt.interface';
 
 export class AuthCredentialsDto {
   @Matches(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, {
@@ -23,6 +25,6 @@ export class AuthCredentialsDto {
   @IsNotEmpty()
   firebaseRegisterToken: String;
 
-  @IsBoolean()
-  isGuest: Boolean;
+  @IsEnum(Role)
+  role: Role;
 }

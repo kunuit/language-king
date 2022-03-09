@@ -12,7 +12,7 @@ import { Role } from '../type/jwt.interface';
 
 export class AuthCredentialsDto {
   @Matches(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, {
-    message: 'must is phone: XXX-XXX-XXXX',
+    message: 'must is phone VN: XXX-XXX-XXXX',
   })
   phone: String;
 

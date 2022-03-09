@@ -33,6 +33,9 @@ export class User {
   @Prop({ default: 12 })
   mana: Number;
 
+  @Prop({ default: 0 })
+  point: Number;
+
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   _id: mongoose.ObjectId;
 }

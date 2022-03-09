@@ -37,19 +37,19 @@ export class RoomService {
   }
 
   //* room detail
-  async joinRoom(joinRoomInFa: JoinRoomInFa): Promise<void> {
+  async joinRoom(joinRoomInFa: JoinRoomInFa): Promise<RoomDetailDocument> {
     const create = new this.roomDetailModel({
       ...joinRoomInFa,
       _id: new Types.ObjectId(),
     });
 
-    await this.roomDetailModel.create(create);
+    return await this.roomDetailModel.create(create);
   }
 
-  async findRD(filter: Object): Promise<RoomDetail[]> {
+  async findRD(filter: Object): Promise<RoomDetailDocument[]> {
     return await this.roomDetailModel.find({ ...filter }).exec();
   }
-  async findOneRD(filter: Object): Promise<RoomDetail> {
+  async findOneRD(filter: Object): Promise<RoomDetailDocument> {
     return await this.roomDetailModel.findOne({ ...filter }).exec();
   }
 }

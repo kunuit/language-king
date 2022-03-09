@@ -39,13 +39,7 @@ export class EarnMoreController {
 
     const manaGift = this.earnMoreService.getLuckyManaGift(percentLucky);
 
-    const user = await this.userService.findOne({ _id });
-
-    if (!!user) {
-      user.mana = user.mana + manaGift;
-    }
-
-    await user.save();
+    await this.userService.updateManaGoldPoint(_id, { mana: manaGift });
 
     return res.status(HttpStatus.OK).json({
       success: true,

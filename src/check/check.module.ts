@@ -1,12 +1,14 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CheckService } from './check.service';
 import { CheckController } from './check.controller';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CheckDetail, CheckDetailSchema } from './schema/check.schema';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
+    forwardRef(() => UserModule),
     ConfigModule,
     MongooseModule.forFeatureAsync([
       {

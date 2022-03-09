@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  forwardRef,
   Get,
   HttpStatus,
+  Inject,
   Param,
   Post,
   Req,
@@ -14,11 +16,16 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { CreateRoomDto } from './dto/room.dto';
 import { RoomService } from './room.service';
+import { UserService } from 'src/user/user.service';
 
 @Controller('room')
 @UseGuards(AuthGuard('jwt'))
 export class RoomController {
-  constructor(private roomService: RoomService) {}
+  constructor(
+    private roomService: RoomService,
+    @Inject(forwardRef(() => UserService))
+    private userService: UserService,
+  ) {}
 
   @Post('/')
   @UsePipes(ValidationPipe)
@@ -38,6 +45,14 @@ export class RoomController {
       } = createRoomDto;
       const { _id } = req.user;
 
+      const isMana = await this.userService.isMana(_id);
+
+      if (!isMana)
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          success: false,
+          message: 'You are run out of mana',
+        });
+
       const newRoom = await this.roomService.createRoom({
         name,
         timeline,
@@ -48,10 +63,15 @@ export class RoomController {
         level,
       });
 
-      await this.roomService.joinRoom({
-        roomId: newRoom._id,
-        userId: _id,
-      });
+      await Promise.all([
+        this.roomService.joinRoom({
+          roomId: newRoom._id,
+          userId: _id,
+        }),
+        this.userService.updateManaGoldPoint(_id, {
+          mana: -1,
+        }),
+      ]);
 
       return res.status(HttpStatus.OK).json({
         success: true,
@@ -95,10 +115,15 @@ export class RoomController {
         });
       }
 
-      await this.roomService.joinRoom({
-        roomId: isHasRoom._id,
-        userId: _id,
-      });
+      await Promise.all([
+        this.roomService.joinRoom({
+          roomId: isHasRoom._id,
+          userId: _id,
+        }),
+        this.userService.updateManaGoldPoint(_id, {
+          mana: -1,
+        }),
+      ]);
 
       return res.status(HttpStatus.OK).json({
         success: true,

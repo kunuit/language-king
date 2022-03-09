@@ -11,6 +11,7 @@ import { RegisterDto } from './dto/register.dto';
 import { User, UserDocument } from './schema/user.schema';
 import { CreateToken, JwtPayload, Role, tokenType } from './type/jwt.interface';
 import { TypeENV } from 'common/env.type';
+import { ParamsPlus } from './type/params';
 
 @Injectable()
 export class UserService {
@@ -36,7 +37,7 @@ export class UserService {
     return await createdUser.save();
   }
 
-  async findOne(payload: object): Promise<any> {
+  async findOne(payload: object): Promise<UserDocument> {
     const user = await this.userModel.findOne(payload).exec();
     if (!user) {
       throw new HttpException(
@@ -48,18 +49,16 @@ export class UserService {
   }
 
   async validateUser(username: String, password: String): Promise<any> {
-    const user = await this.userModel.findOne({ username }).exec();
+    const user = await this.findOne({ username });
     if (user && user.password === password) return user;
     return null;
   }
 
   // check exists
   async doesTypeExists(type: String, value: any): Promise<any> {
-    const user = await this.userModel
-      .findOne({
-        [`${type}`]: value,
-      })
-      .exec();
+    const user = await this.userModel.findOne({
+      [`${type}`]: value,
+    });
     if (user) {
       return user;
     }
@@ -106,13 +105,13 @@ export class UserService {
     // generate and sign access token, refresh token
     const accessToken = this._createToken({
       phone,
-      username: user?.username,
+      _id: user?._id,
       type: tokenType.AccessToken,
     });
 
     const refreshToken = this._createToken({
       phone,
-      username: user?.username,
+      _id: user?._id,
       type: tokenType.RefreshToken,
     });
 
@@ -129,12 +128,13 @@ export class UserService {
         role: user.role,
         mana: user.mana,
         gold: user.gold,
+        point: user.point,
       },
     };
   }
 
   async logout(_id: String): Promise<any> {
-    const user = await this.userModel.findOne({ _id }).exec();
+    const user = await this.findOne({ _id });
 
     user.firebaseRegisterToken = null;
 
@@ -153,10 +153,27 @@ export class UserService {
     return user;
   }
 
+  async updateManaGoldPoint(
+    _id: String,
+    paramsPlus: ParamsPlus,
+  ): Promise<User> {
+    const user = await this.findOne({ _id });
+    user.gold = +user.gold + +(paramsPlus.gold || 0);
+    user.mana = +user.mana + +(paramsPlus.mana || 0);
+    user.point = +user.point + +(paramsPlus.point || 0);
+    return await user.save();
+  }
+
+  async isMana(_id: String): Promise<Boolean> {
+    const user = await this.findOne({ _id });
+    if (user.mana <= 0) return false;
+    return true;
+  }
+
   private _createToken(createToken: CreateToken): any {
-    const { phone, username, type } = createToken;
+    const { phone, _id, type } = createToken;
     const token = this.jwtService.sign(
-      { phone, username },
+      { phone, _id },
       {
         secret:
           type === tokenType.AccessToken

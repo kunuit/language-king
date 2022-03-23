@@ -10,10 +10,13 @@ import {
   ValidationPipe,
   UsePipes,
   UseGuards,
+  Post,
+  Body,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RandomInt } from 'common/utils/math';
 import { CheckService } from 'src/check/check.service';
+import { DictionaryService } from 'src/dictionary/dictionary.service';
 import { RoomService } from 'src/room/room.service';
 import { Type } from 'src/room/type/room.interface';
 import { WordService } from './word.service';
@@ -26,7 +29,9 @@ export class WordController {
     private roomService: RoomService,
     @Inject(forwardRef(() => CheckService))
     private checkService: CheckService,
-  ) {}
+    @Inject(forwardRef(() => DictionaryService))
+    private dictionaryService: DictionaryService,
+  ) { }
 
   // @Get('/')
   // async getChaoticWord(@Res() res, @Req() req) {
@@ -82,6 +87,14 @@ export class WordController {
 
     if (type === Type.chaoTicLetter) {
       data = { ...data, word: await this.wordService.getChaoticWord() };
+    }
+
+    if (type === Type.listenWord) {
+      data = { ...data, word: await this.wordService.getListenWord() }
+    }
+
+    if (type === Type.spliceWord) {
+      data = { ...data, word: await this.wordService.getSpliceWord() }
     }
 
     if (type === Type.truthyAndFalsyWord) {

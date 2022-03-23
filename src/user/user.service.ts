@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { CACHE_MANAGER, HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -11,7 +11,8 @@ import { RegisterDto } from './dto/register.dto';
 import { User, UserDocument } from './schema/user.schema';
 import { CreateToken, JwtPayload, Role, tokenType } from './type/jwt.interface';
 import { TypeENV } from 'common/env.type';
-import { ParamsPlus } from './type/params';
+import { ParamsPlus, PayloadFindOne } from './type/params';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class UserService {
@@ -20,7 +21,8 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private readonly jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) { }
 
   async create(registerDto: RegisterDto): Promise<User> {
     const createdUser = await new this.userModel({
@@ -37,8 +39,10 @@ export class UserService {
     return await createdUser.save();
   }
 
-  async findOne(payload: object): Promise<UserDocument> {
-    const user = await this.userModel.findOne(payload).exec();
+  async findOne(payload: PayloadFindOne): Promise<UserDocument> {
+    const isCacheUser = await this.cacheManager.get(`${payload._id?.toString()}`)
+    if (!!isCacheUser) return this.userModel.hydrate(isCacheUser);
+    const user = await this.userModel.findOne(payload).exec()
     if (!user) {
       throw new HttpException(
         { message: 'invalid user', success: false },

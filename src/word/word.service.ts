@@ -1,13 +1,17 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { RandomInt } from 'common/utils/math';
+import { CheckService } from 'src/check/check.service';
 import { DictionaryService } from '../dictionary/dictionary.service';
+import { SpliceWordParams, NextSpliceWordParams } from './type/params.interface';
 
 @Injectable()
 export class WordService {
   constructor(
     @Inject(forwardRef(() => DictionaryService))
     private readonly dictionaryService: DictionaryService,
-  ) {}
+    @Inject(forwardRef(() => CheckService))
+    private readonly checkService: CheckService,
+  ) { }
 
   getChaoticWord() {
     const wordTmp = this.dictionaryService.randomWordInList({ number: 2 });
@@ -26,6 +30,47 @@ export class WordService {
       chaoticWord: data.join('/'),
       truthyWord: wordTmp?.trim()?.toLowerCase(),
     };
+  }
+
+  getListenWord() {
+    const wordTmp = this.dictionaryService.randomWordInList({ number: 2 });
+
+    return {
+      listenWord: wordTmp?.trim()?.toLowerCase(),
+      truthyWord: wordTmp?.trim()?.toLowerCase(),
+    }
+  }
+
+  getSpliceWord(spliceWordParams?: SpliceWordParams) {
+    const wordTmp = this.dictionaryService.randomWordInList({ number: 2 });
+
+    return {
+      spliceWord: wordTmp?.trim()?.toLowerCase(),
+      truthyWord: wordTmp?.trim()?.toLowerCase(),
+    }
+  }
+
+  async getNextSpliceWord(nextSpliceWordParams: NextSpliceWordParams) {
+    const { roomId, oldWord } = nextSpliceWordParams
+
+    let arrKeyOld = oldWord.split(' ');
+    // TODO get word[2] and get list word in dic with it
+    let listWord = await this.dictionaryService.list(arrKeyOld[1]);
+    // TODO get all key in database
+    let listKey = await this.checkService.find({ roomId });
+    // TODO check 2 list to get new word
+    listWord = listWord.filter((e) => {
+      if (!listKey.some((item) => item.checkKey === e?.trim())) return e;
+    });
+    // TODO check listWord empty
+    if (!listWord || listWord.length == 0) return { isWin: true }
+
+    const keyTmp = listWord[RandomInt(0, listWord?.length)]?.trim()
+
+    return {
+      isWin: false,
+      nextWord: keyTmp
+    }
   }
 
   async getTrueAndFalseWord() {

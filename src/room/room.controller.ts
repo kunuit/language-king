@@ -25,7 +25,7 @@ export class RoomController {
     private roomService: RoomService,
     @Inject(forwardRef(() => UserService))
     private userService: UserService,
-  ) {}
+  ) { }
 
   @Post('/')
   @UsePipes(ValidationPipe)
@@ -68,15 +68,15 @@ export class RoomController {
           roomId: newRoom._id,
           userId: _id,
         }),
-        this.userService.updateManaGoldPoint(_id, {
+        await this.userService.updateManaGoldPoint(_id, {
           mana: -1,
-        }),
+        })
       ]);
 
       return res.status(HttpStatus.OK).json({
         success: true,
         message: 'We have a new room',
-        data: { room: newRoom },
+        data: { room: newRoom }
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({

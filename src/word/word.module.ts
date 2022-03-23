@@ -13,5 +13,6 @@ import { CheckModule } from 'src/check/check.module';
   ],
   providers: [WordService],
   controllers: [WordController],
+  exports: [WordService],
 })
-export class WordModule {}
+export class WordModule { }

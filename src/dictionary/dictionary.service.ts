@@ -66,7 +66,8 @@ export class DictionaryService {
   }
   has(word) {
     if (!word) return false;
-    return this.lower_words.indexOf(word.toLowerCase()) > -1;
+    const isHas = this.words.some(e => e?.trim() === word.toLowerCase());
+    return isHas
   }
   lookup(word) {
     return this.definitions[word];

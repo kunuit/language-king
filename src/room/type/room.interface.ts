@@ -4,6 +4,8 @@ export enum Type {
   chaoTicLetter = 'chaoticLetter',
   truthyAndFalsyWord = 'truthyAndFalsyWord',
   description = 'descriptionWord',
+  listenWord = 'listenWord',
+  spliceWord = 'spliceWord'
 }
 
 export enum Level {

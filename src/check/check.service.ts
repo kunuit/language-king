@@ -9,7 +9,7 @@ export class CheckService {
   constructor(
     @InjectModel(CheckDetail.name)
     private checkDetailModel: Model<CheckDetailDocument>,
-  ) {}
+  ) { }
 
   async createCheckDetail(
     createCheckInFa: CreateCheckInFa,
@@ -35,6 +35,7 @@ export class CheckService {
       .find({ ...filter }, anything ? anything : null, options ? options : null)
       .exec();
   }
+
   async findOne(
     filter: Object,
     anything?: Object,
@@ -45,7 +46,6 @@ export class CheckService {
         { ...filter },
         anything ? anything : null,
         options ? options : null,
-      )
-      .exec();
+      ).exec();
   }
 }

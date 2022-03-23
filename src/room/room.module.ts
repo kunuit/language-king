@@ -36,4 +36,4 @@ import { UserModule } from 'src/user/user.module';
   controllers: [RoomController],
   exports: [RoomService]
 })
-export class RoomModule {}
+export class RoomModule { }

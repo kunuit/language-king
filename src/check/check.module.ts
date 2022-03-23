@@ -5,10 +5,14 @@ import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CheckDetail, CheckDetailSchema } from './schema/check.schema';
 import { UserModule } from 'src/user/user.module';
+import { DictionaryModule } from 'src/dictionary/dictionary.module';
+import { WordModule } from 'src/word/word.module';
 
 @Module({
   imports: [
     forwardRef(() => UserModule),
+    forwardRef(() => DictionaryModule),
+    forwardRef(() => WordModule),
     ConfigModule,
     MongooseModule.forFeatureAsync([
       {
@@ -25,4 +29,4 @@ import { UserModule } from 'src/user/user.module';
   controllers: [CheckController],
   exports: [CheckService],
 })
-export class CheckModule {}
+export class CheckModule { }

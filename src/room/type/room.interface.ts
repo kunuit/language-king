@@ -5,7 +5,13 @@ export enum Type {
   truthyAndFalsyWord = 'truthyAndFalsyWord',
   description = 'descriptionWord',
   listenWord = 'listenWord',
-  spliceWord = 'spliceWord'
+  spliceWord = 'spliceWord',
+  shootingCoordinates = "shootingCoordinates"
+}
+
+export enum EnemyType {
+  pve = 'pve',
+  pvp = 'pvp'
 }
 
 export enum Level {
@@ -13,6 +19,11 @@ export enum Level {
   silver = 'silver',
   gold = 'gold',
   platinum = 'platinum',
+}
+
+export enum StatusWaiting {
+  waiting = 0,
+  ready = 1,
 }
 
 export interface CreateRoomInFa {
@@ -23,6 +34,7 @@ export interface CreateRoomInFa {
   timeline: Number;
   level: Level;
   numberOfQuestion: Number;
+  enemyType: EnemyType
 }
 
 export interface JoinRoomInFa {

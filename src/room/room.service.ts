@@ -1,5 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Cache } from 'cache-manager';
 import { Model, Types } from 'mongoose';
 import * as randomstring from 'randomstring';
 import { RoomDetail, RoomDetailDocument } from './schema/room-detail.schema';
@@ -13,6 +14,7 @@ export class RoomService {
     @InjectModel(Room.name) private roomModel: Model<RoomDocument>,
     @InjectModel(RoomDetail.name)
     private roomDetailModel: Model<RoomDetailDocument>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
     this.logger = new Logger();
   }
@@ -51,5 +53,13 @@ export class RoomService {
   }
   async findOneRD(filter: Object): Promise<RoomDetailDocument> {
     return await this.roomDetailModel.findOne({ ...filter }).exec();
+  }
+
+  async getCacheRoom(key: string): Promise<any> {
+    return await this.cacheManager.get(key);
+  }
+
+  async setCacheRoom(key: string, value: Object): Promise<any> {
+    await this.cacheManager.set(`${key}`, value, { ttl: 60000 })
   }
 }

@@ -133,6 +133,7 @@ export class UserService {
         mana: user.mana,
         gold: user.gold,
         point: user.point,
+        _id: user?._id?.toString(),
       },
     };
   }

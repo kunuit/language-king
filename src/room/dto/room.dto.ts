@@ -7,7 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Type, Level } from '../type/room.interface';
+import { Type, Level, EnemyType } from '../type/room.interface';
 
 export class CreateRoomDto {
   @ApiProperty()
@@ -37,4 +37,8 @@ export class CreateRoomDto {
   @ApiProperty()
   @IsString()
   level: Level;
+
+  @ApiProperty()
+  @IsEnum(EnemyType)
+  enemyType: EnemyType
 }

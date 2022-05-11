@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { User } from 'src/user/schema/user.schema';
-import { Level, Type } from '../type/room.interface';
+import { EnemyType, Level, Type } from '../type/room.interface';
 
 export type RoomDocument = Room & Document;
 
@@ -36,6 +36,9 @@ export class Room {
 
   @Prop({ default: Level.copper })
   level: Level;
+
+  @Prop({ default: EnemyType.pve })
+  enemyType: EnemyType
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);

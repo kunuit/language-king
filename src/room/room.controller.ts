@@ -42,6 +42,7 @@ export class RoomController {
         memQu,
         numberOfQuestion,
         level,
+        enemyType
       } = createRoomDto;
       const { _id } = req.user;
 
@@ -61,6 +62,7 @@ export class RoomController {
         memQu,
         numberOfQuestion,
         level,
+        enemyType
       });
 
       await Promise.all([

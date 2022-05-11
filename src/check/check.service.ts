@@ -13,7 +13,7 @@ export class CheckService {
 
   async createCheckDetail(
     createCheckInFa: CreateCheckInFa,
-  ): Promise<CheckDetail> {
+  ): Promise<CheckDetailDocument> {
     const create = new this.checkDetailModel({
       ...createCheckInFa,
       _id: new Types.ObjectId(),
@@ -30,7 +30,7 @@ export class CheckService {
     filter: Object,
     anything?: Object,
     options?: Object,
-  ): Promise<CheckDetail[]> {
+  ): Promise<CheckDetailDocument[]> {
     return await this.checkDetailModel
       .find({ ...filter }, anything ? anything : null, options ? options : null)
       .exec();
@@ -40,7 +40,7 @@ export class CheckService {
     filter: Object,
     anything?: Object,
     options?: Object,
-  ): Promise<CheckDetail> {
+  ): Promise<CheckDetailDocument> {
     return await this.checkDetailModel
       .findOne(
         { ...filter },

@@ -13,10 +13,11 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { DictionaryService } from 'src/dictionary/dictionary.service';
+import { SocketCooGateway } from 'src/shooting-coordinates/shooting-coordinates.gateway';
 import { UserService } from 'src/user/user.service';
 import { WordService } from 'src/word/word.service';
 import { CheckService } from './check.service';
-import { CheckDto } from './dto/check.dto';
+import { CheckDto, CheckShootingCoo } from './dto/check.dto';
 
 @Controller('check')
 @UseGuards(AuthGuard('jwt'))
@@ -29,6 +30,8 @@ export class CheckController {
     private dictionaryService: DictionaryService,
     @Inject(forwardRef(() => WordService))
     private wordService: WordService,
+    @Inject(forwardRef(() => SocketCooGateway))
+    private socketCooGateway: SocketCooGateway
   ) { }
 
   @Post('/')
@@ -156,6 +159,49 @@ export class CheckController {
       });
     }
 
+
+  }
+
+  @Post('/shooting-coordinates')
+  @UsePipes(ValidationPipe)
+  async checkShootingCoo(@Res() res, @Req() req, @Body() checkShootingCoo: CheckShootingCoo) {
+    const { _id } = req.user
+    const { enemyId, orderPlaying, position, roomId, roomKey } = checkShootingCoo
+
+    const checkKeyExists = await this.checkService.findOne({
+      roomId,
+    });
+
+    const { checkPosition } = checkKeyExists
+
+    if (!checkPosition) {
+      return res.status(HttpStatus.OK).json({
+        success: true,
+        resultCode: 4191139,
+        message: 'Not find key to check',
+        data: { isCorrect: false },
+      });
+    }
+
+    if (!!checkPosition) {
+      const enemyPositionArray = Object.keys(checkPosition[`${enemyId}`])
+      this.socketCooGateway.handlePlayerCheckPosition(roomKey, {enemyId, orderPlaying, position,userId: _id})
+      if (enemyPositionArray?.includes(`${position}`)) {
+         
+        return res.status(HttpStatus.OK).json({
+          success: true,
+          resultCode: 0,
+          message: 'Hit the target',
+          data: checkPosition[`${enemyId}`]?.[`${position}`]
+        })
+      } else {
+        return res.status(HttpStatus.OK).json({
+          success: true,
+          resultCode: 4191141,
+          message: 'Miss the target'
+        })
+      }
+    }
 
   }
 }

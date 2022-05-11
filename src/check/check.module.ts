@@ -7,12 +7,14 @@ import { CheckDetail, CheckDetailSchema } from './schema/check.schema';
 import { UserModule } from 'src/user/user.module';
 import { DictionaryModule } from 'src/dictionary/dictionary.module';
 import { WordModule } from 'src/word/word.module';
+import { ShootingCoordinatesModule } from './../shooting-coordinates/shooting-coordinates.module';
 
 @Module({
   imports: [
-    forwardRef(() => UserModule),
+  forwardRef(() => UserModule),
     forwardRef(() => DictionaryModule),
     forwardRef(() => WordModule),
+    forwardRef(() => ShootingCoordinatesModule),
     ConfigModule,
     MongooseModule.forFeatureAsync([
       {

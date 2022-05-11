@@ -13,3 +13,26 @@ export class CheckDto {
   @IsNotEmpty()
   roomId: ObjectId;
 }
+
+export class CheckShootingCoo {
+  @ApiProperty()
+  @IsString()
+  enemyId: ObjectId;
+
+  @ApiProperty()
+  @IsNumber()
+  orderPlaying: number;
+
+  @ApiProperty()
+  @IsNumber()
+  position: number;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  roomId: ObjectId;
+
+  @ApiProperty()
+  @IsString()
+  roomKey: String
+}

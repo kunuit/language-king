@@ -12,8 +12,11 @@ export class CheckDetail {
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Room' })
   roomId: Room;
 
-  @Prop({ required: true })
+  @Prop({ type: String  })
   checkKey: String;
+
+  @Prop({ type: Object })
+  checkPosition: Object;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   _id: mongoose.ObjectId;

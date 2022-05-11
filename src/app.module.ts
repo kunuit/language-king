@@ -9,6 +9,7 @@ import { RoomModule } from './room/room.module';
 import { CheckModule } from './check/check.module';
 import { LoggerMiddleware } from './utils/middleware/logger.middleware';
 import { EarnMoreModule } from './earn-more/earn-more.module';
+import { ShootingCoordinatesModule } from './shooting-coordinates/shooting-coordinates.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { EarnMoreModule } from './earn-more/earn-more.module';
     RoomModule,
     CheckModule,
     EarnMoreModule,
+    ShootingCoordinatesModule,
   ],
 })
 export class AppModule implements NestModule {

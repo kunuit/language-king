@@ -184,10 +184,10 @@ export class CheckController {
     }
 
     if (!!checkPosition) {
-      const enemyPositionArray = Object.keys(checkPosition[`${enemyId}`])
-      this.socketCooGateway.handlePlayerCheckPosition(roomKey, {enemyId, orderPlaying, position,userId: _id})
+      const enemyPositionArray = Object.keys(checkPosition[`${enemyId}`] || {})
+      this.socketCooGateway.handlePlayerCheckPosition(roomKey, { enemyId, orderPlaying, position, userId: _id })
       if (enemyPositionArray?.includes(`${position}`)) {
-         
+
         return res.status(HttpStatus.OK).json({
           success: true,
           resultCode: 0,

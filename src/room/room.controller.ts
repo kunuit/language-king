@@ -130,6 +130,9 @@ export class RoomController {
       return res.status(HttpStatus.OK).json({
         success: true,
         message: `You joint ${isHasRoom.name} room`,
+        data: {
+          room: isHasRoom
+        }
       });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({

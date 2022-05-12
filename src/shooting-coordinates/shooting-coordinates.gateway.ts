@@ -1,5 +1,6 @@
 import { CACHE_MANAGER, forwardRef, Inject, Injectable } from '@nestjs/common';
 import {
+    ConnectedSocket,
     MessageBody,
     SubscribeMessage,
     WebSocketGateway,
@@ -10,7 +11,7 @@ import { Cache } from 'cache-manager';
 
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { RoomService } from 'src/room/room.service';
 import { StatusWaiting } from 'src/room/type/room.interface';
 import { UserService } from 'src/user/user.service';
@@ -35,8 +36,10 @@ export class SocketCooGateway {
     server: Server;
 
     @SubscribeMessage('joinRoom')
-    async joinRoom(@MessageBody() data: any): Promise<Observable<WsResponse<number>>> {
+    async joinRoom(@MessageBody() data: any, @ConnectedSocket() client: Socket): Promise<Observable<WsResponse<number>>> {
         console.log('data', data)
+        console.log('this.server', this.server)
+        console.log('client', client)
 
         const { roomKey, userInfo } = data
 
@@ -50,6 +53,9 @@ export class SocketCooGateway {
         console.log(`${roomKey}`)
 
         let dataRoomCached: any = await this.roomService.getCacheRoom?.(`${this.namespace}_${roomKey}`)
+
+        await client.emit("oldData", { data: dataRoomCached })
+
         dataRoomCached = { ...(dataRoomCached || {}), [`${userInfo?._id}`]: userInfo }
 
         await this.roomService.setCacheRoom(`${this.namespace}_${roomKey}`, dataRoomCached)

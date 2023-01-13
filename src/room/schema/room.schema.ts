@@ -11,19 +11,19 @@ export type RoomDocument = Room & Document;
 })
 export class Room {
   @Prop({ trim: true, required: true })
-  name: String;
+  name: string;
 
   @Prop({ required: true, unique: true })
-  roomKey: String;
+  roomKey: string;
 
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   ownRoom: User;
 
   @Prop({ default: 1 })
-  memQu: Number;
+  memQu: number;
 
   @Prop({ default: 9 })
-  timeline: Number;
+  timeline: number;
 
   @Prop({ required: true })
   type: Type;
@@ -32,13 +32,13 @@ export class Room {
   _id: mongoose.ObjectId;
 
   @Prop({ default: 5 })
-  numberOfQuestion: Number;
+  numberOfQuestion: number;
 
   @Prop({ default: Level.copper })
   level: Level;
 
   @Prop({ default: EnemyType.pve })
-  enemyType: EnemyType
+  enemyType: EnemyType;
 }
 
 export const RoomSchema = SchemaFactory.createForClass(Room);

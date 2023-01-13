@@ -14,20 +14,20 @@ export class RegisterDto {
   @MinLength(4)
   @MaxLength(20)
   @IsNotEmpty()
-  username: String;
+  username: string;
 
   @IsString()
   @MinLength(6)
   @MaxLength(6)
-  password: String;
+  password: string;
 
   @IsEmail()
-  email: String;
+  email: string;
 
   @Matches(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, {
     message: 'must is phone VN: XXX-XXX-XXXX',
   })
-  phone: String;
+  phone: string;
 
   @IsNotEmpty()
   role: Role;
@@ -37,5 +37,5 @@ export class IsExistPhoneDto {
   @Matches(/(84|0[3|5|7|8|9])+([0-9]{8})\b/, {
     message: 'must is phone VN: XXX-XXX-XXXX',
   })
-  phone: String;
+  phone: string;
 }

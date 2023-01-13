@@ -1,4 +1,11 @@
-import { CACHE_MANAGER, HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -21,8 +28,8 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private readonly jwtService: JwtService,
     private configService: ConfigService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
-  ) { }
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   async create(registerDto: RegisterDto): Promise<User> {
     const createdUser = await new this.userModel({
@@ -40,9 +47,11 @@ export class UserService {
   }
 
   async findOne(payload: PayloadFindOne): Promise<UserDocument> {
-    const isCacheUser = await this.cacheManager.get(`${payload._id?.toString()}`)
+    const isCacheUser = await this.cacheManager.get(
+      `${payload._id?.toString()}`,
+    );
     if (!!isCacheUser) return this.userModel.hydrate(isCacheUser);
-    const user = await this.userModel.findOne(payload).exec()
+    const user = await this.userModel.findOne(payload).exec();
     if (!user) {
       throw new HttpException(
         { message: 'invalid user', success: false },
@@ -52,14 +61,14 @@ export class UserService {
     return user;
   }
 
-  async validateUser(username: String, password: String): Promise<any> {
+  async validateUser(username: string, password: string): Promise<any> {
     const user = await this.findOne({ username });
     if (user && user.password === password) return user;
     return null;
   }
 
   // check exists
-  async doesTypeExists(type: String, value: any): Promise<any> {
+  async doesTypeExists(type: string, value: any): Promise<any> {
     const user = await this.userModel.findOne({
       [`${type}`]: value,
     });
@@ -138,7 +147,7 @@ export class UserService {
     };
   }
 
-  async logout(_id: String): Promise<any> {
+  async logout(_id: string): Promise<any> {
     const user = await this.findOne({ _id });
 
     user.firebaseRegisterToken = null;
@@ -147,7 +156,7 @@ export class UserService {
     return true;
   }
 
-  async update(_id: String, updateParams: Object): Promise<any> {
+  async update(_id: string, updateParams: any): Promise<any> {
     const user = await this.userModel.findByIdAndUpdate({ _id }, updateParams);
     if (!user) {
       throw new HttpException(
@@ -159,7 +168,7 @@ export class UserService {
   }
 
   async updateManaGoldPoint(
-    _id: String,
+    _id: string,
     paramsPlus: ParamsPlus,
   ): Promise<User> {
     const user = await this.findOne({ _id });
@@ -169,7 +178,7 @@ export class UserService {
     return await user.save();
   }
 
-  async isMana(_id: String): Promise<Boolean> {
+  async isMana(_id: string): Promise<boolean> {
     const user = await this.findOne({ _id });
     if (user.mana <= 0) return false;
     return true;
@@ -196,6 +205,34 @@ export class UserService {
           ? this.configService.get(TypeENV.EXPIRES_IN_ACCESS)
           : this.configService.get(TypeENV.EXPIRES_IN_REFRESH),
       [`${type}`]: token,
+    };
+  }
+
+  async getMe(id: string): Promise<any> {
+    // find user in db
+    const user = await this.findOne({ _id: id });
+
+    const refreshToken = this._createToken({
+      phone: user.phone,
+      _id: id,
+      type: tokenType.RefreshToken,
+    });
+
+    return {
+      success: true,
+      message: 'User has been created successfully',
+      data: {
+        ...refreshToken,
+        username: user.username,
+        phone: user.phone,
+        email: user.email,
+        // createdAt: user.createdAt,
+        role: user.role,
+        mana: user.mana,
+        gold: user.gold,
+        point: user.point,
+        _id: user?._id?.toString(),
+      },
     };
   }
 }

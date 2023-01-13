@@ -6,7 +6,7 @@ export class EarnMoreService {
   private logger = new Logger('EarnMoreService');
   constructor() {}
 
-  getLuckyManaGift(percentLucky: Number): Number {
+  getLuckyManaGift(percentLucky: number): number {
     let mana = 0;
     const isGift = Math.random() * 100 <= percentLucky;
 

@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongoose';
 
 export interface CreateCheckInFa {
-  checkKey?: String;
+  checkKey?: string;
   checkPosition?: Object;
   roomId: ObjectId;
 }

@@ -1,10 +1,10 @@
-import { ObjectId } from "mongoose";
+import { ObjectId } from 'mongoose';
 
 export interface SpliceWordParams {
-    preWord?: String;
+  preWord?: string;
 }
 
 export interface NextSpliceWordParams {
-    roomId?: ObjectId;
-    oldWord?: String;
+  roomId?: ObjectId;
+  oldWord?: string;
 }

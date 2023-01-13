@@ -9,5 +9,5 @@ import {
 } from 'class-validator';
 
 export class GetGiftLuckyLaKiButtonDto {
-  percentLucky: Number;
+  percentLucky: number;
 }

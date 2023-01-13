@@ -1,10 +1,10 @@
 export interface JwtPayload {
-  phone: String;
+  phone: string;
 }
 
 export interface CreateToken {
-  phone: String;
-  _id: String;
+  phone: string;
+  _id: string;
   type: tokenType;
 }
 

@@ -15,11 +15,11 @@ export class CreateRoomDto {
   @MinLength(4)
   @MaxLength(20)
   @IsNotEmpty()
-  name: String;
+  name: string;
 
   @ApiProperty()
   @IsNumber()
-  memQu: Number;
+  memQu: number;
 
   @ApiProperty()
   @IsEnum(Type)
@@ -28,11 +28,11 @@ export class CreateRoomDto {
 
   @ApiProperty()
   @IsNumber()
-  timeline: Number;
+  timeline: number;
 
   @ApiProperty()
   @IsNumber()
-  numberOfQuestion: Number;
+  numberOfQuestion: number;
 
   @ApiProperty()
   @IsString()
@@ -40,5 +40,5 @@ export class CreateRoomDto {
 
   @ApiProperty()
   @IsEnum(EnemyType)
-  enemyType: EnemyType
+  enemyType: EnemyType;
 }

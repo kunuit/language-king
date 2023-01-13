@@ -1,11 +1,11 @@
 export interface ParamsPlus {
-  mana?: Number;
-  gold?: Number;
-  point?: Number;
+  mana?: number;
+  gold?: number;
+  point?: number;
 }
 
 export interface PayloadFindOne {
-  _id?: String;
-  username?: String;
-  phone?: String;
+  _id?: string;
+  username?: string;
+  phone?: string;
 }

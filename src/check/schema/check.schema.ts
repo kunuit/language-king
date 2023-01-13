@@ -12,8 +12,8 @@ export class CheckDetail {
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Room' })
   roomId: Room;
 
-  @Prop({ type: String  })
-  checkKey: String;
+  @Prop({ type: String })
+  checkKey: string;
 
   @Prop({ type: Object })
   checkPosition: Object;

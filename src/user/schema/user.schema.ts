@@ -10,16 +10,16 @@ export type UserDocument = User & Document;
 })
 export class User {
   @Prop({ trim: true, dropDups: true, index: true })
-  username: String;
+  username: string;
 
   @Prop({ required: true })
-  password: String;
+  password: string;
 
   @Prop({ required: true })
-  email: String;
+  email: string;
 
   @Prop({ required: true })
-  phone: String;
+  phone: string;
 
   @Prop({ unique: false })
   firebaseRegisterToken: string;
@@ -28,13 +28,13 @@ export class User {
   role: Role;
 
   @Prop({ default: 300 })
-  gold: Number;
+  gold: number;
 
   @Prop({ default: 12 })
-  mana: Number;
+  mana: number;
 
   @Prop({ default: 0 })
-  point: Number;
+  point: number;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId })
   _id: mongoose.ObjectId;

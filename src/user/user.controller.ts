@@ -90,4 +90,24 @@ export class UserController {
       });
     }
   }
+
+  @Get('getMe')
+  @UseGuards(AuthGuard('jwt'))
+  async getMe(@Req() req): Promise<any> {
+    return await this.userService.getMe(req.user._id);
+    // const meInfo =
+
+    // if (meInfo) {
+    //   return res.status(HttpStatus.OK).json({
+    //     data: meInfo,
+    //     success: true,
+    //     message: 'User has been logout',
+    //   });
+    // } else {
+    //   return res.status(HttpStatus.OK).json({
+    //     success: false,
+    //     message: 'User can not logout',
+    //   });
+    // }
+  }
 }

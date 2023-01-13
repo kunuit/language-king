@@ -6,7 +6,7 @@ export class CheckDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  checkKey: String;
+  checkKey: string;
 
   @ApiProperty()
   @IsString()
@@ -34,5 +34,5 @@ export class CheckShootingCoo {
 
   @ApiProperty()
   @IsString()
-  roomKey: String
+  roomKey: String;
 }

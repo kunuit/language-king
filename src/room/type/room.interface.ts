@@ -6,12 +6,12 @@ export enum Type {
   description = 'descriptionWord',
   listenWord = 'listenWord',
   spliceWord = 'spliceWord',
-  shootingCoordinates = "shootingCoordinates"
+  shootingCoordinates = 'shootingCoordinates',
 }
 
 export enum EnemyType {
   pve = 'pve',
-  pvp = 'pvp'
+  pvp = 'pvp',
 }
 
 export enum Level {
@@ -27,14 +27,14 @@ export enum StatusWaiting {
 }
 
 export interface CreateRoomInFa {
-  name: String;
-  memQu: Number;
+  name: string;
+  memQu: number;
   ownRoom: ObjectId;
   type: Type;
-  timeline: Number;
+  timeline: number;
   level: Level;
-  numberOfQuestion: Number;
-  enemyType: EnemyType
+  numberOfQuestion: number;
+  enemyType: EnemyType;
 }
 
 export interface JoinRoomInFa {
